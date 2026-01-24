@@ -1,0 +1,268 @@
+.admin__content {
+    margin: 0 auto;
+    padding: 30px 15px;
+    max-width: 1230px;
+}
+
+.admin__heading {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.admin__heading h2 {
+    color: var(--main);
+    font-weight: 700;
+    letter-spacing: .02em;
+}
+
+/* 検索フォーム */
+.admin-search {
+    background: #fff;
+    border: 1px solid var(--border);
+    padding: 18px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.admin-search__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 18px;
+    align-items: flex-end;
+}
+
+.admin-search__group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 160px;
+}
+
+.admin-search__group label {
+    font-size: 12px;
+    color: var(--main);
+}
+
+.admin-search__input,
+.admin-search__select {
+    height: 38px;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    background: #fff;
+}
+
+.admin-search__dates {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-search__buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* ボタン（仕様書のブラウン） */
+.admin-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    padding: 0 14px;
+    border: 1px solid var(--btn);
+    background: #fff;
+    color: var(--btn);
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.admin-button--primary {
+    background: var(--btn);
+    color: #fff;
+}
+
+.admin-button--danger {
+    border-color: #B54B4B;
+    color: #B54B4B;
+    background: #fff;
+}
+
+/* テーブル */
+.admin-table__wrap {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th {
+    background: #F6F3F0;
+    color: var(--main);
+    font-weight: 700;
+    font-size: 12px;
+    padding: 14px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.admin-table td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    font-size: 14px;
+}
+
+.admin-pagination {
+    margin-top: 18px;
+}
+
+/* ===== Laravel links()（Tailwindテンプレ）をCSSだけで整形 ===== */
+.admin-pagination {
+    margin-top: 18px;
+}
+
+/* 全体を中央寄せ・縦の余白 */
+.admin-pagination nav[role="navigation"] {
+    display: flex;
+    justify-content: center;
+}
+
+/* 「Prev/Next」「Showing...」を含むブロックを縦積みで整列 */
+.admin-pagination nav[role="navigation"]>div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Showing 1 to 7 of ... の見た目 */
+.admin-pagination nav[role="navigation"] p {
+    margin: 0;
+    font-size: 12px;
+    color: var(--main);
+    opacity: .75;
+}
+
+/* ページリンク群（中身が span の塊）を横並びにする */
+.admin-pagination nav[role="navigation"] .inline-flex,
+.admin-pagination nav[role="navigation"] .shadow-sm,
+.admin-pagination nav[role="navigation"] span[aria-label="Pagination Navigation"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* クリックできるリンク / 現在ページ / disabled を全部ボタン化 */
+.admin-pagination nav[role="navigation"] a,
+.admin-pagination nav[role="navigation"] span[aria-current="page"]>span,
+.admin-pagination nav[role="navigation"] span[aria-disabled="true"]>span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 34px;
+    height: 34px;
+    padding: 0 10px;
+
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+
+    color: var(--main);
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1;
+}
+
+/* hover */
+.admin-pagination nav[role="navigation"] a:hover {
+    background: #F6F3F0;
+}
+
+/* 現在ページ */
+.admin-pagination nav[role="navigation"] span[aria-current="page"]>span {
+    background: var(--btn);
+    border-color: var(--btn);
+    color: #fff;
+}
+
+/* disabled（Prev/Nextが押せない時） */
+.admin-pagination nav[role="navigation"] span[aria-disabled="true"]>span {
+    opacity: .45;
+}
+
+/* ★本命：SVG矢印が巨大化するのを強制的に止める */
+.admin-pagination nav[role="navigation"] svg {
+    width: 14px !important;
+    height: 14px !important;
+}
+
+/* モーダル */
+.admin-modal__overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .35);
+}
+
+.admin-modal {
+    background: #fff;
+    width: min(780px, 92vw);
+    margin: 8vh auto;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    border: 1px solid var(--border);
+}
+
+.admin-modal__close {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--main);
+}
+
+.admin-modal__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.admin-modal__title {
+    margin: 0;
+    color: var(--main);
+    font-weight: 700;
+}
+
+.admin-modal__table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-modal__table th {
+    width: 180px;
+    background: #F6F3F0;
+    color: var(--main);
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.admin-modal__table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid var(--border);
+}

@@ -1,0 +1,18 @@
+# ===== Editor =====
+.vscode/
+
+# ===== OS =====
+.DS_Store
+
+# ===== Laravel =====
+src/vendor/
+src/.env
+
+# ===== Node =====
+node_modules/
+
+# ===== Docker / MySQL =====
+docker/mysql/data/
+
+# ===== Logs =====
+*.log

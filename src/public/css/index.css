@@ -1,0 +1,127 @@
+.contact-form__content {
+    margin: 0 auto;
+    padding: 30px 15px;
+    max-width: 1230px;
+}
+
+.contact-form__heading {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.form {
+    margin: 0 auto;
+    width: 70%;
+    max-width: 800px;
+    text-align: left; /* 入力欄は左揃え */
+}
+
+/* 仕様書に合わせて「左：ラベル / 右：入力」を2カラムで固定 */
+.form__group {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    column-gap: 24px;
+    align-items: start;
+    margin-bottom: 24px;
+}
+
+/* 必須ラベル */
+.form__label--required {
+    padding: 4px 6px;
+    border-radius: 3px;
+    background: initial;
+    color: #ff0000;
+}
+
+/* エラー：複数行でも必ず高さを確保して下に押し出す */
+.form__error {
+    height: auto;          /* ★固定しない */
+    min-height: 20px;      /* 1行ぶんの最低高さ */
+    margin-top: 6px;
+    margin-bottom: 12px;   /* ★次の項目と重ならない */
+    color: #ff0000;
+    text-align: left;
+    line-height: 1.5;
+    white-space: normal;
+    word-break: break-word;
+}
+
+/* 右側入力カラムの最大幅（長い入力欄の基準） */
+.form__group-content {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column; /* 入力 → エラー を縦積み */
+    gap: 6px;
+}
+
+/* 入力欄：固定幅(600px)はやめて、右カラム内で100%に */
+.form__input--text input,
+.form__input--textarea textarea,
+select {
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    box-sizing: border-box;
+    appearance: none;
+}
+
+.form__input--text input {
+    height: 40px;
+}
+
+.form__input--textarea textarea {
+    height: 180px;
+}
+
+/* （任意）姓・名を同一行にしたい場合：このラッパーを使う
+   <div class="form__input--name"><input ...><input ...></div>
+*/
+.form__input--name {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* （任意）電話番号3分割を同一行で揃えたい場合：このラッパーを使う
+   <div class="form__input--tel"><input ...><span>-</span>...</div>
+*/
+.form__input--tel {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+}
+.form__input--tel input{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+}
+
+.form__input--gender {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 8px;
+    align-items: center;
+}
+
+.form__button {
+    margin-top: 30px;
+    text-align: center; /* ボタンは中央 */
+}
+
+/* ボタンは common.css 側の form__button-submit を使う前提。
+   もし index.css の古いボタン指定が残っていると上書きされるため、
+   ここでは最低限の指定のみ（common.css を優先） */
+.form__button-submit {
+    padding: 10px;
+    width: 30%;
+    height: 50px;
+    border: none;
+    border-radius: 3px;
+    background: var(--btn);
+    color: #fff;
+    cursor: pointer;
+}
