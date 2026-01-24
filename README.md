@@ -22,7 +22,7 @@ Docker / Docker Compose
 Nginx
 
 ##ER図
-<!-- 作成したER図の画像を貼る -->
+![ER図](docs/ER図.png)
 
 ##URL
 
