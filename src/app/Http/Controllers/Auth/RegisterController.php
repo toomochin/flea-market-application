@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 class RegisterController extends Controller
 {
     public function create()
@@ -16,12 +17,15 @@ class RegisterController extends Controller
 
     public function store(RegisterRequest $request)
     {
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('login');
+        event(new Registered($user));
+        Auth::login($user);
+
+        return redirect('/mypage');
     }
 }

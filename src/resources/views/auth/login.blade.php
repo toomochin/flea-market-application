@@ -1,52 +1,44 @@
 @extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
-@endsection
+@section('title', 'ログイン')
+@section('body_class', 'auth-body')
+@section('main_class', 'auth-main')
+
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+@endpush
 
 @section('content')
-    <div class="login-form__content">
-        <div class="login-form__heading">
-            <h2>ログイン</h2>
-        </div>
-        <form class="form" method="POST" action="{{ route('login') }}">
+    <div class="auth-card">
+        <h1 class="auth-title">ログイン</h1>
+
+        {{-- エラー（必要なら） --}}
+        @if ($errors->any())
+            <div class="form-error">
+                {{ $errors->first() }}
+            </div>
+        @endif
+
+        <form method="POST" action="{{ route('login') }}">
             @csrf
-            <div class="form__group">
-                <div class="form__group-title">
-                    <span class="form__label--item">メールアドレス</span>
-                </div>
-                <div class="form__group-content">
-                    <div class="form__input--text">
-                        <input type="email" name="email" value="{{ old('email') }}" />
-                    </div>
-                    <div class="form__error">
-                        @error('email')
-                            {{ $message }}
-                        @enderror
-                    </div>
-                </div>
+
+            <div class="form-group">
+                <label class="form-label">メールアドレス</label>
+                <input class="form-input" type="email" name="email" value="{{ old('email') }}" required autofocus>
+                @error('email')<div class="form-error">{{ $message }}</div>@enderror
             </div>
-            <div class="form__group">
-                <div class="form__group-title">
-                    <span class="form__label--item">パスワード</span>
-                </div>
-                <div class="form__group-content">
-                    <div class="form__input--text">
-                        <input type="password" name="password" />
-                    </div>
-                    <div class="form__error">
-                        @error('password')
-                            {{ $message }}
-                        @enderror
-                    </div>
-                </div>
+
+            <div class="form-group">
+                <label class="form-label">パスワード</label>
+                <input class="form-input" type="password" name="password" required>
+                @error('password')<div class="form-error">{{ $message }}</div>@enderror
             </div>
-            <div class="form__button">
-                <button class="form__button-submit" type="submit">ログイン</button>
+
+            <button class="btn btn-red" type="submit">ログインする</button>
+
+            <div class="auth-links">
+                <a class="link" href="{{ route('register') }}">会員登録はこちら</a>
             </div>
         </form>
-        <div class="register__link">
-            <a class="register__button-submit" href="/register">会員登録の方はこちら</a>
-        </div>
     </div>
 @endsection

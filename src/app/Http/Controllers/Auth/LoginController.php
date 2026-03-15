@@ -23,7 +23,7 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             // ログイン後の遷移先（必要に応じて変更）
-            return redirect()->intended('/');
+            return redirect()->intended(route('items.index'));
         }
 
         // 認証失敗時

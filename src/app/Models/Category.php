@@ -8,9 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
-    protected $fillable = ['content'];
-    public function contacts()
+
+    // content を name に修正！
+    protected $fillable = ['name'];
+
+    // 不要になった contacts の代わりに、items（商品）との紐付けを追加
+    public function items()
     {
-        return $this->hasMany(Contact::class);
+        return $this->belongsToMany(Item::class);
     }
 }

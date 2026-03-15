@@ -1,0 +1,182 @@
+.sell {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+.sell__title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 10px 0 20px;
+}
+
+.sell__block {
+    padding: 18px 0;
+    border-top: 1px solid #e5e5e5;
+}
+
+.sell__label {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.sell__subLabel {
+    font-size: 13px;
+    font-weight: 700;
+    margin: 12px 0 8px;
+}
+
+.sell__imageBox {
+    border: 1px dashed #cfcfcf;
+    border-radius: 6px;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sell__preview {
+    width: 260px;
+    max-width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.hidden {
+    display: none;
+}
+
+.sell__imageBtn {
+    border: 1px solid #ff2d2d;
+    color: #ff2d2d;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-weight: 700;
+    cursor: pointer;
+    background: #fff;
+}
+
+.sell__fileHidden {
+    display: none;
+}
+
+.sell__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.sell__chip input {
+    display: none;
+}
+
+.sell__chip span {
+    display: inline-block;
+    border: 1px solid #ff2d2d;
+    color: #ff2d2d;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.sell__chip input:checked+span {
+    background: #ff2d2d;
+    color: #fff;
+}
+
+.sell__select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.sell__field {
+    display: block;
+    margin-top: 12px;
+}
+
+.sell__field span {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.sell__field input,
+.sell__field textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.sell__price {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sell__submit {
+    width: 100%;
+    margin-top: 18px;
+    background: #ff2d2d;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 0;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.form-error {
+    color: #ff2d2d;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+/* ===== category chips ===== */
+.sell__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 12px 0;
+}
+
+.sell__chip {
+    cursor: pointer;
+}
+
+/* checkboxを隠す */
+.sell__chip input {
+    display: none;
+}
+
+/* 未選択 */
+.sell__chip span {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid #ff2d2d;
+    color: #ff2d2d;
+    font-size: 12px;
+    font-weight: 600;
+    background: #fff;
+    transition: all 0.15s ease;
+}
+
+/* 選択中 */
+.sell__chip input:checked+span {
+    background: #ff2d2d;
+    color: #fff;
+}
+
+/* hover（任意） */
+.sell__chip:hover span {
+    opacity: 0.85;
+}
