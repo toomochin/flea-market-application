@@ -1,39 +1,43 @@
-# アプリケーション名
-Contact Form / Admin Management App
+アプリケーション名（フリマアプリ）
 
-## 環境構築
--コンテナ起動
-docker compose up -d --build
--PHPコンテナに入る
-docker compose exec php bash
--依存関係インストール
+環境構築
+Dockerを使用して環境構築を行います。以下の手順に従って実行してください。
+
+リポジトリのクローン
+
+Bash
+git clone git@github.com:toomochin/flea-market-application.git
+Dockerコンテナのビルドと起動
+
+Bash
+docker-compose up -d --build
+PHPコンテナ内でのセットアップ
+
+Bash
+docker-compose exec php bash
+
+# 依存パッケージのインストール
 composer install
--環境設定
+
+# 環境設定ファイルの作成
 cp .env.example .env
--Docker環境用にDB接続情報を設定（重要）
-cat << 'EOF' > .env
-DB_CONNECTION=mysql
-DB_HOST=mysql
-DB_PORT=3306
-DB_DATABASE=laravel_db
-DB_USERNAME=laravel_user
-DB_PASSWORD=laravel_pass
-EOF
 php artisan key:generate
--マイグレーション・シーディング
-php artisan migrate --seed
 
-##使用技術（実行環境）
-PHP 8.x
-Laravel 8.x
-MySQL 8.x
-Docker / Docker Compose
-Nginx
+# マイグレーションとシーディング（初期データの投入）
+php artisan migrate:fresh --seed
 
-##ER図
+使用技術（実行環境）
+PHP: 8.x
+
+Framework: Laravel 8.x
+
+Database: MySQL
+
+Infrastructure: Docker / Docker Compose
+
+Authentication: Laravel Fortify
+
+ER図
 ![ER図](docs/ER図.png)
 
-##URL
-
-開発環境: http://localhost
-管理画面: http://localhost/admin
+開発環境: http://localhost/
