@@ -36,3 +36,5 @@ RUN mkdir -p /var/www/html/storage /var/www/html/bootstrap/cache \
 RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
 EXPOSE 80
+
+ENTRYPOINT ["/bin/sh", "-c", "php artisan migrate --force && apache2-foreground"]
