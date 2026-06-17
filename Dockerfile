@@ -28,7 +28,9 @@ WORKDIR /var/www/html
 COPY . .
 
 # 権限の設定
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# 権限の設定（存在しない場合はフォルダを作成してから権限変更）
+RUN mkdir -p /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # 依存関係のインストール
 RUN composer install --no-dev --optimize-autoloader
