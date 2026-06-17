@@ -25,7 +25,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # ソースコードのコピー
 WORKDIR /var/www/html
-COPY . .
+COPY src/ .
 
 # 権限の設定
 # 権限の設定（存在しない場合はフォルダを作成してから権限変更）
