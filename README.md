@@ -47,6 +47,7 @@ Lavaral 環境構築
 【Stripe決済を使用する場合、最下部に以下を追記】
 STRIPE_KEY=your_stripe_publishable_key_here
 STRIPE_SECRET=your_stripe_secret_key_here
+※ここを自分のStripeのキーに差し替えてください
 ```
 
 5. php artisan key:generate
