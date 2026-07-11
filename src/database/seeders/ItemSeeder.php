@@ -114,6 +114,15 @@ class ItemSeeder extends Seeder
                 'condition' => '目立った傷や汚れなし',
                 'image_path' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/%E5%A4%96%E5%87%BA%E3%83%A1%E3%82%A4%E3%82%AF%E3%82%A2%E3%83%83%E3%83%95%E3%82%9A%E3%82%BB%E3%83%83%E3%83%88.jpg',
             ],
+            [
+                'name' => '玉ねぎ',
+                'brand' => null,
+                'price' => 300, // ※仕様書の価格と異なる場合は変更してください
+                'description' => '新鮮な玉ねぎの詰め合わせです。料理に幅広くお使いいただけます。',
+                'condition' => '目立った傷や汚れなし',
+                'image_path' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/iLoveIMG+d.jpg',
+                'categories' => ['キッチン'], // 「野菜」等のカテゴリ指定が仕様書になければ親しいものを固定
+            ],
         ];
 
         foreach ($items as $data) {
