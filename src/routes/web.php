@@ -13,6 +13,7 @@ use App\Http\Controllers\ProfileSetupController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\StripeController; // ✨ Stripeコントローラーを追加
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +24,7 @@ Route::get('/', [ItemController::class, 'index'])->name('items.index');
 
 /*
 |--------------------------------------------------------------------------
-| PG05 商品詳細（✨指摘対応：未認証ユーザーでも見られるようにグループ外へ移動）
+| PG05 商品詳細
 |--------------------------------------------------------------------------
 */
 Route::get('/item/{item}', [ItemController::class, 'show'])->name('items.show');
@@ -71,6 +72,7 @@ Route::middleware(['auth', 'verified', 'profile.completed'])->group(function () 
 
     /*
     | PG06 商品購入
+    |--------------------------------------------------------------------------
     */
     Route::get('/purchase/{item}', [PurchaseController::class, 'create'])
         ->name('purchases.create');
@@ -78,8 +80,25 @@ Route::middleware(['auth', 'verified', 'profile.completed'])->group(function () 
         ->name('purchases.confirm');
     Route::post('/purchase/{item}', [PurchaseController::class, 'store'])
         ->name('purchases.store');
+
+    /*
+    | ✨ 追加：Stripe 決済関連のルーティング
+    | 既存の仕様に合わせ、{item} で商品データを受け取れるように設計
+    |--------------------------------------------------------------------------
+    */
+    // Stripe決済画面へリダイレクト
+    Route::post('/purchase/{item}/checkout', [StripeController::class, 'checkout'])
+        ->name('stripe.checkout');
+    // 決済成功時の戻り先
+    Route::get('/purchase/success/{item}', [StripeController::class, 'success'])
+        ->name('stripe.success');
+    // 決済キャンセル時の戻り先
+    Route::get('/purchase/cancel/{item}', [StripeController::class, 'cancel'])
+        ->name('stripe.cancel');
+
     /*
     | PG07 送付先住所変更
+    |--------------------------------------------------------------------------
     */
     Route::get('/purchase/address/{item}', [ProfileController::class, 'editAddress'])
         ->name('purchase.address.edit');
@@ -88,6 +107,7 @@ Route::middleware(['auth', 'verified', 'profile.completed'])->group(function () 
 
     /*
     | PG08 商品出品
+    |--------------------------------------------------------------------------
     */
     Route::get('/sell', [ItemController::class, 'create'])
         ->name('items.create');
@@ -96,12 +116,14 @@ Route::middleware(['auth', 'verified', 'profile.completed'])->group(function () 
 
     /*
     | PG09 / PG11 / PG12 マイページ
+    |--------------------------------------------------------------------------
     */
     Route::get('/mypage', [MypageController::class, 'show'])
         ->name('mypage.show');
 
     /*
     | PG10 プロフィール編集
+    |--------------------------------------------------------------------------
     */
     Route::get('/mypage/profile', [ProfileSetupController::class, 'edit'])
         ->name('profile.edit');
@@ -110,11 +132,11 @@ Route::middleware(['auth', 'verified', 'profile.completed'])->group(function () 
 
     /*
     | お気に入り / コメント
+    |--------------------------------------------------------------------------
     */
     Route::post('/item/{item}/favorite', [FavoriteController::class, 'toggle'])
         ->name('items.favorite');
 
     Route::post('/item/{item}/comments', [CommentController::class, 'store'])
-        ->middleware('auth')
         ->name('items.comments.store');
 });
