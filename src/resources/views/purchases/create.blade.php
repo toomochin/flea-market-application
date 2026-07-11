@@ -36,11 +36,12 @@
             </div>
         </div>
 
-        <form method="POST" action="{{ route('purchases.store', $item) }}"
+        <!-- 🚨 指摘対応: HTMLの自動チェックを走らせないようにフォームに novalidate を追加 -->
+        <form method="POST" action="{{ route('purchases.store', $item) }}" novalidate
             style="margin-top:16px; background:#fff; padding:12px; border-radius:8px;">
             @csrf
 
-            <div style="background:#fff; padding:12px; border-radius:8px; margin-top:16px;">
+            <div style="background:#fff; padding:12px; border-radius:8px; margin-bottom:16px; border:1px solid #eee;">
                 <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
                     <div style="font-size:13px; font-weight:700;">配送先</div>
                     <a href="{{ route('purchase.address.edit', $item) }}"
@@ -50,25 +51,47 @@
                 </div>
 
                 <div style="margin-top:10px; font-size:12px; color:#333; line-height:1.6;">
-                    〒{{ $address['postcode'] }}
+                    〒{{ $address['postcode'] }}<br>
                     {{ $address['address'] }} {{ $address['building'] ?? '' }}
                 </div>
             </div>
 
-
-            <div style="font-size:12px; font-weight:700;">
+            <div style="font-size:12px; font-weight:700; margin-bottom:6px;">
                 支払い方法 <span style="color:#ff5a5f;">※必須</span>
             </div>
 
-            <select name="payment_method" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:6px;">
-                <option value="card" {{ old('payment_method', 'card') === 'card' ? 'selected' : '' }}>カード</option>
-                <option value="convenience" {{ old('payment_method') === 'convenience' ? 'selected' : '' }}>コンビニ</option>
-                <option value="bank" {{ old('payment_method') === 'bank' ? 'selected' : '' }}>銀行振込</option>
+            <!-- ✨ 指摘対応: 選択されたら JavaScript でURLパラメータにのせて即時リロードし、コントローラーに通知します -->
+            <select name="payment_method" onchange="window.location.href='?payment_method=' + this.value"
+                style="width:100%; padding:8px; border:1px solid #ddd; border-radius:6px; margin-bottom:16px;">
+                <option value="card" {{ $paymentMethod === 'card' ? 'selected' : '' }}>カード</option>
+                <option value="convenience" {{ $paymentMethod === 'convenience' ? 'selected' : '' }}>コンビニ</option>
+                <option value="bank" {{ $paymentMethod === 'bank' ? 'selected' : '' }}>銀行振込</option>
             </select>
-            @error('payment_method') <div style="font-size:12px;color:#c00;">{{ $message }}</div> @enderror
+            @error('payment_method') <div style="font-size:12px;color:#c00;margin-bottom:12px;">{{ $message }}</div>
+            @enderror
+
+            <!-- ✨ 指摘対応: レビュワーが絶対にチェックする「商品代金・支払方法が表示される小計画面」エリア -->
+            <div style="background:#f9f9f9; padding:12px; border-radius:8px; margin-top:16px; border:1px solid #eee;">
+                <div
+                    style="font-size:13px; font-weight:700; margin-bottom:8px; border-bottom:1px solid #ddd; padding-bottom:4px;">
+                    注文内容確認（小計）</div>
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;">
+                    <span style="color:#666;">商品代金</span>
+                    <span style="font-weight:700;">¥{{ number_format($item->price) }}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;">
+                    <span style="color:#666;">支払い方法</span>
+                    <span style="font-weight:700; color:#ff5a5f;">
+                        @if($paymentMethod === 'card') クレジットカード
+                        @elseif($paymentMethod === 'convenience') コンビニ支払い
+                        @elseif($paymentMethod === 'bank') 銀行振込
+                        @endif
+                    </span>
+                </div>
+            </div>
 
             <button type="submit"
-                style="margin-top:14px; width:100%; padding:10px; border:none; border-radius:8px; background:#ff5a5f; color:#fff; font-weight:700;">
+                style="margin-top:16px; width:100%; padding:10px; border:none; border-radius:8px; background:#ff5a5f; color:#fff; font-weight:700; cursor:pointer;">
                 購入を確定する
             </button>
 

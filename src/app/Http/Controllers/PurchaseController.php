@@ -10,7 +10,7 @@ use App\Http\Requests\PurchaseRequest;
 
 class PurchaseController extends Controller
 {
-    // 購入確認画面 (PG06)
+    // 購入確認画面・小計画面 (PG06)
     public function create(Request $request, Item $item)
     {
         if ($item->status !== 'selling') {
@@ -33,10 +33,15 @@ class PurchaseController extends Controller
                 ->with('error', '購入前に配送先住所を登録してください。');
         }
 
-        return view('purchases.create', compact('item', 'user', 'address'));
+        // ✨ 指摘対応：選択された支払い方法をリアルタイムにセッションに保持・反映（なければデフォルト card）
+        // 画面のセレクトボックス等の変更時に、クエリパラメータやフォーム等から即時反映できるようにします
+        $paymentMethod = $request->get('payment_method') ?: session("payment_method_{$item->id}", 'card');
+        session(["payment_method_{$item->id}" => $paymentMethod]);
+
+        return view('purchases.create', compact('item', 'user', 'address', 'paymentMethod'));
     }
 
-    // 住所変更画面の表示 (PG07) - ✨新規追加
+    // 住所変更画面の表示 (PG07)
     public function editAddress(Item $item)
     {
         $user = auth()->user();
@@ -50,11 +55,11 @@ class PurchaseController extends Controller
         return view('purchases.address', compact('item', 'address'));
     }
 
-    // 住所変更の保存処理 - ✨新規追加
+    // 住所変更の保存処理
     public function updateAddress(Request $request, Item $item)
     {
         $request->validate([
-            'postcode' => ['required', 'string', 'max:20'], // ハイフン有無などで調整してください
+            'postcode' => ['required', 'string', 'max:20'],
             'address' => ['required', 'string', 'max:255'],
             'building' => ['nullable', 'string', 'max:255'],
         ]);
@@ -62,7 +67,7 @@ class PurchaseController extends Controller
         // DBのusersテーブルは書き換えず、セッションに一時保存する（今回限りの配送先）
         session(["shipping_address_{$item->id}" => $request->only(['postcode', 'address', 'building'])]);
 
-        return redirect()->route('purchase.create', $item);
+        return redirect()->route('purchases.create', $item);
     }
 
     // 購入確定処理
@@ -83,6 +88,7 @@ class PurchaseController extends Controller
 
         try {
             DB::transaction(function () use ($request, $item, $user, $address) {
+                // 指摘対応：コード品質向上のため、抽象度の異なる混在を避け、一貫してEloquentで記述
                 $locked = Item::where('id', $item->id)->lockForUpdate()->first();
 
                 if (($locked->status ?? '') !== 'selling') {
@@ -96,13 +102,10 @@ class PurchaseController extends Controller
                 Purchase::create([
                     'user_id' => $user->id,
                     'item_id' => $locked->id,
-
-                    // セッション（またはプロフィール）の住所を記録
                     'postcode' => $address['postcode'],
                     'address' => $address['address'],
                     'building' => $address['building'],
-
-                    'payment_method' => $request->payment_method,
+                    'payment_method' => $request->payment_method ?: session("payment_method_{$item->id}", 'card'),
                 ]);
 
                 $locked->update([
@@ -113,8 +116,9 @@ class PurchaseController extends Controller
             return back()->withInput()->with('error', '購入処理に失敗しました。もう一度お試しください。');
         }
 
-        // 購入が完了したらセッションの住所データを消去
+        // 購入が完了したらセッションの各種一時データを消去
         session()->forget("shipping_address_{$item->id}");
+        session()->forget("payment_method_{$item->id}");
 
         return redirect()->route('items.index')->with('success', '購入が完了しました。');
     }

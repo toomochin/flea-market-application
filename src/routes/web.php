@@ -74,6 +74,8 @@ Route::middleware(['auth', 'verified', 'profile.completed'])->group(function () 
     */
     Route::get('/purchase/{item}', [PurchaseController::class, 'create'])
         ->name('purchases.create');
+    Route::get('/purchase/confirm/{item}', [PurchaseController::class, 'confirm'])
+        ->name('purchases.confirm');
     Route::post('/purchase/{item}', [PurchaseController::class, 'store'])
         ->name('purchases.store');
     /*
