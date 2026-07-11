@@ -13,17 +13,20 @@
     <div class="items-container">
 
         <div class="items-tabs">
-            <a href="{{ route('items.index', array_filter(['tab' => 'all', 'q' => request('q')])) }}"
+            <!-- ✨ 検索ワード (keyword) の状態を維持してタブ切り替え -->
+            <a href="{{ route('items.index', array_filter(['tab' => 'all', 'keyword' => request('keyword')])) }}"
                 class="items-tab {{ ($tab ?? 'all') === 'all' ? 'is-active' : '' }}">
                 おすすめ
             </a>
 
-            <a href="{{ route('items.index', array_filter(['tab' => 'mylist', 'q' => request('q')])) }}"
+            <!-- ✨ 検索ワード (keyword) の状態を維持してタブ切り替え -->
+            <a href="{{ route('items.index', array_filter(['tab' => 'mylist', 'keyword' => request('keyword')])) }}"
                 class="items-tab {{ ($tab ?? 'all') === 'mylist' ? 'is-active' : '' }}">
                 マイリスト
             </a>
         </div>
 
+        <!-- ✨ 分岐構造を完全にクリーン化 -->
         @if($items->isEmpty())
             <div style="font-size:12px;color:#666;margin-top:10px;">
                 {{ ($tab ?? 'all') === 'mylist' ? 'マイリストはまだありません' : '商品がありません' }}
@@ -37,7 +40,6 @@
                         ? $item->image_path
                         : asset('storage/' . $item->image_path) }}" alt="">
 
-                            {{-- Sold表示（要件） --}}
                             @if(($item->status ?? '') === 'sold')
                                 <div
                                     style="position:absolute;left:8px;top:8px;background:#000;color:#fff;font-size:12px;padding:4px 8px;border-radius:4px;">
