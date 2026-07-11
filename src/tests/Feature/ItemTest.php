@@ -23,7 +23,8 @@ class ItemTest extends TestCase
             'user_id' => $user->id,
             'name' => $name,
             'price' => 1000,
-            'condition' => '良好',
+            // ✨ 指摘対応：仕様書に定義されている正式な状態（condition）の文言に統一
+            'condition' => '目立った傷や汚れなし',
             'description' => 'テスト用の商品説明です。',
             'status' => $status,
             'image_path' => 'dummy.jpg',
@@ -31,7 +32,7 @@ class ItemTest extends TestCase
     }
 
     // ==========================================
-    // ID 4: 商品一覧取得のテスト (済)
+    // ID 4: 商品一覧取得のテスト
     // ==========================================
     public function test_can_get_all_items()
     {
@@ -64,7 +65,7 @@ class ItemTest extends TestCase
     }
 
     // ==========================================
-    // ID 5: マイリスト一覧取得のテスト (済)
+    // ID 5: マイリスト一覧取得のテスト
     // ==========================================
     public function test_only_liked_items_are_displayed_in_mylist()
     {
@@ -115,8 +116,8 @@ class ItemTest extends TestCase
         $this->createItem($user, 'selling', '特別なスニーカー');
         $this->createItem($user, 'selling', '普通のシャツ');
 
-        // キーワード検索
-        $response = $this->get('/?keyword=スニーカー'); // 検索のURLパラメータ名に合わせて調整
+        // コントローラー側で受けるパラメータ名 `keyword` に完全に一致
+        $response = $this->get('/?keyword=スニーカー');
 
         $response->assertStatus(200);
         $response->assertSee('特別なスニーカー');
@@ -132,12 +133,13 @@ class ItemTest extends TestCase
         Favorite::create(['user_id' => $me->id, 'item_id' => $item->id]);
 
         $this->actingAs($me);
-        // マイリストタブ ＋ 検索キーワード
+        // マイリストタブ ＋ 検索キーワード（keyword）の状態維持テスト
         $response = $this->get('/?tab=mylist&keyword=スニーカー');
 
         $response->assertStatus(200);
         $response->assertSee('特別なスニーカー');
     }
+
     // ==========================================
     // ID 7: 商品詳細情報取得のテスト
     // ==========================================
@@ -149,7 +151,8 @@ class ItemTest extends TestCase
             'name' => 'テスト商品詳細',
             'brand' => 'テストブランド',
             'price' => 5000,
-            'condition' => '新品、未使用',
+            // ✨ 指摘対応：仕様書に実在するマスターデータの選択肢文言に合わせる
+            'condition' => '目立った傷や汚れなし',
             'description' => '詳細なテスト説明文です。',
             'status' => 'selling',
             'image_path' => 'dummy.jpg',
@@ -170,12 +173,10 @@ class ItemTest extends TestCase
             'item_id' => $item->id,
         ]);
 
-        // ★ログイン必須な仕様かもしれないので、ログイン状態にしてみる
         $this->actingAs($user);
 
         $response = $this->get("/item/{$item->id}");
 
-        // ★もし弾かれたら、リダイレクト先のURLをターミナルに表示！
         if ($response->status() === 302) {
             dump('【詳細ページ】リダイレクト先: ' . $response->headers->get('Location'));
         }
@@ -184,7 +185,8 @@ class ItemTest extends TestCase
         $response->assertSee('テスト商品詳細');
         $response->assertSee('テストブランド');
         $response->assertSee('5,000');
-        $response->assertSee('新品、未使用');
+        // ✨ 指摘対応：assertSeeの内容も新しい選択肢の文言に更新
+        $response->assertSee('目立った傷や汚れなし');
         $response->assertSee('詳細なテスト説明文です。');
         $response->assertSee('ファッション');
         $response->assertSee('メンズ');
@@ -210,7 +212,7 @@ class ItemTest extends TestCase
             'description' => '出品のテストです',
             'price' => 3000,
             'condition' => '目立った傷や汚れなし',
-            'categories' => [$category->id], // 👈 コントローラーに合わせて修正！
+            'categories' => [$category->id],
             'image' => $file,
         ]);
 
@@ -227,8 +229,6 @@ class ItemTest extends TestCase
             'category_id' => $category->id,
         ]);
 
-        // 👈 コントローラーの仕様（詳細ページへの遷移）に合わせて修正！
-        // ※もしエラーになった場合は route('items.show', $item) 等に変更してください
         $response->assertRedirect("/item/{$item->id}");
     }
 }
