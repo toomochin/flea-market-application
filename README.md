@@ -78,6 +78,15 @@ MAIL_FROM_ADDRESS=admin@example.com
 
 ![ER図](docs/ER図.png)
 
+## 初期アカウント
+
+`make init` または `make fresh` 実行時に、以下のアカウントが作成されます。パスワードはすべて `password` です。
+
+| 役割 / アカウント名 | メールアドレス     | パスワード | 初期状態 |
+| ------------------- | ------------------ | ---------- | -------- |
+| 出品者 / テスト太郎 | dummy1@example.com | password   |
+| 購入者 / テスト花子 | dummy2@example.com | password   |
+
 ## アプリケーションを開く
 
 | サービス         | URL                   |
