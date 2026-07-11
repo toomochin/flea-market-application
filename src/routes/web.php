@@ -23,6 +23,13 @@ Route::get('/', [ItemController::class, 'index'])->name('items.index');
 
 /*
 |--------------------------------------------------------------------------
+| PG05 商品詳細（✨指摘対応：未認証ユーザーでも見られるようにグループ外へ移動）
+|--------------------------------------------------------------------------
+*/
+Route::get('/item/{item}', [ItemController::class, 'show'])->name('items.show');
+
+/*
+|--------------------------------------------------------------------------
 | PG03 / PG04 Auth
 |--------------------------------------------------------------------------
 */
@@ -51,7 +58,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
-        return redirect()->route('items.index');
+        return redirect()->route('profile.edit');
     })->name('verification.verify');
 });
 
@@ -61,12 +68,6 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'verified', 'profile.completed'])->group(function () {
-
-    /*
-    | PG05 商品詳細
-    */
-    Route::get('/item/{item}', [ItemController::class, 'show'])
-        ->name('items.show');
 
     /*
     | PG06 商品購入
