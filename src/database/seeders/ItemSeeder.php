@@ -12,12 +12,26 @@ class ItemSeeder extends Seeder
     public function run(): void
     {
         // ユーザー取得（なければ作成）
-        $user = User::first() ?? User::factory()->create([
-            'name' => 'ダミーユーザー',
-            'email' => 'dummy@example.com',
-            'email_verified_at' => now(),
-            'profile_completed' => true,
-        ]);
+        $user1 = User::firstOrCreate(
+            ['email' => 'dummy1@example.com'],
+            [
+                'name' => 'テスト太郎（出品者）',
+                'password' => bcrypt('password'), // ログイン用パスワード
+                'email_verified_at' => now(),
+                'profile_completed' => true,
+            ]
+        );
+
+        $user2 = User::firstOrCreate(
+            ['email' => 'dummy2@example.com'],
+            [
+                'name' => 'テスト花子（購入者）',
+                'password' => bcrypt('password'), // ログイン用パスワード
+                'email_verified_at' => now(),
+                'profile_completed' => true,
+            ]
+        );
+
 
         // 1. 仕様書に定義されている正式なカテゴリ一覧を作成
         $categories = [
@@ -134,7 +148,7 @@ class ItemSeeder extends Seeder
         // 3. データの登録とカテゴリの完全一致紐付け
         foreach ($itemsData as $data) {
             $item = Item::create([
-                'user_id' => $user->id,
+                'user_id' => $user1->id,
                 'name' => $data['name'],
                 'brand' => $data['brand'],
                 'price' => $data['price'],
