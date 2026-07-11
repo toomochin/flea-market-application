@@ -9,8 +9,11 @@ return new class extends Migration {
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('item_id')->constrained()->cascadeOnDelete();
+
+            // ✨ 指摘対応：参照先テーブルを明示的に指定して制約の不備を予防
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('item_id')->constrained('items')->cascadeOnDelete();
+
             $table->text('body');
             $table->timestamps();
 

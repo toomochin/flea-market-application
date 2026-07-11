@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Category;
-use Illuminate\Support\Arr;
 
 class ItemSeeder extends Seeder
 {
@@ -20,8 +19,8 @@ class ItemSeeder extends Seeder
             'profile_completed' => true,
         ]);
 
-        // カテゴリ（content）
-        $categoryMap = [
+        // 1. 仕様書に定義されている正式なカテゴリ一覧を作成
+        $categories = [
             'ファッション',
             '家電',
             'インテリア',
@@ -31,101 +30,109 @@ class ItemSeeder extends Seeder
             '本',
             'ゲーム',
             'スポーツ',
-            'キッチン',
+            'キッチン'
         ];
 
-        foreach ($categoryMap as $c) {
-            Category::firstOrCreate(['name' => $c]);
+        foreach ($categories as $name) {
+            Category::firstOrCreate(['name' => $name]);
         }
 
-        $categoryIds = Category::pluck('id')->toArray();
-
-        // 商品データ（S3画像URL）
-        $items = [
+        // 2. 仕様書の商品一覧データと100%一致させたマスターデータ
+        $itemsData = [
             [
                 'name' => '腕時計',
-                'brand' => 'EMPORIO ARMANI',
                 'price' => 15000,
-                'description' => 'スタイリッシュなデザインのメンズ腕時計。',
-                'condition' => '良好',
+                'description' => 'スタイリッシュなデザインのメンズ腕時計',
+                'condition' => '目立った傷や汚れなし',
+                'brand' => 'メンズ', // 仕様書でブランド名欄に指定されている文字に修正
                 'image_path' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Armani+Mens+Clock.jpg',
+                'categories' => ['ファッション', 'メンズ']
             ],
             [
                 'name' => 'HDD',
-                'brand' => null,
                 'price' => 5000,
-                'description' => '高速で信頼性の高いハードディスク。',
+                'description' => '高速で信頼性の高いハードディスク',
                 'condition' => '目立った傷や汚れなし',
+                'brand' => null,
                 'image_path' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/HDD+Hard+Disk.jpg',
+                'categories' => ['家電']
             ],
             [
                 'name' => '革靴',
-                'brand' => null,
                 'price' => 4000,
-                'description' => 'クラシックなデザインの革靴。',
+                'description' => 'クラシックなデザインの革靴',
                 'condition' => 'やや傷や汚れあり',
+                'brand' => null,
                 'image_path' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Leather+Shoes+Product+Photo.jpg',
+                'categories' => ['ファッション', 'メンズ']
             ],
             [
                 'name' => 'ノートPC',
-                'brand' => null,
                 'price' => 45000,
-                'description' => '高性能なノートパソコン。',
-                'condition' => '良好',
+                'description' => '高性能なノートパソコン',
+                'condition' => '目立った傷や汚れなし',
+                'brand' => null,
                 'image_path' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Living+Room+Laptop.jpg',
+                'categories' => ['家電']
             ],
             [
                 'name' => 'マイク',
-                'brand' => null,
                 'price' => 8000,
-                'description' => '高音質のレコーディング用マイク。',
+                'description' => '高音質のレコーディング用マイク',
                 'condition' => '目立った傷や汚れなし',
+                'brand' => null,
                 'image_path' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Music+Mic+4632231.jpg',
+                'categories' => ['家電']
             ],
             [
                 'name' => 'ショルダーバッグ',
-                'brand' => null,
                 'price' => 3500,
-                'description' => 'おしゃれなショルダーバッグ。',
+                'description' => 'おしゃれなショルダーバッグ',
                 'condition' => 'やや傷や汚れあり',
+                'brand' => null,
                 'image_path' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Purse+fashion+pocket.jpg',
+                'categories' => ['ファッション', 'レディース']
             ],
             [
                 'name' => 'タンブラー',
-                'brand' => null,
                 'price' => 500,
-                'description' => '使いやすいタンブラー。',
+                'description' => '使いやすいタンブラー',
                 'condition' => '状態が悪い',
+                'brand' => null,
                 'image_path' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Tumbler+souvenir.jpg',
+                'categories' => ['キッチン']
             ],
             [
                 'name' => 'コーヒーミル',
-                'brand' => null,
                 'price' => 4000,
-                'description' => '手動のコーヒーミル。',
-                'condition' => '良好',
+                'description' => '手動のコーヒーミル',
+                'condition' => '目立った傷や汚れなし',
+                'brand' => null,
                 'image_path' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Waitress+with+Coffee+Grinder.jpg',
+                'categories' => ['キッチン']
             ],
             [
                 'name' => 'メイクセット',
-                'brand' => null,
                 'price' => 2500,
-                'description' => '便利なメイクアップセット。',
+                'description' => '便利なメイクアップセット',
                 'condition' => '目立った傷や汚れなし',
+                'brand' => null,
                 'image_path' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/%E5%A4%96%E5%87%BA%E3%83%A1%E3%82%A4%E3%82%AF%E3%82%A2%E3%83%83%E3%83%95%E3%82%9A%E3%82%BB%E3%83%83%E3%83%88.jpg',
+                'categories' => ['コスメ']
             ],
             [
                 'name' => '玉ねぎ',
-                'brand' => null,
-                'price' => 300, // ※仕様書の価格と異なる場合は変更してください
-                'description' => '新鮮な玉ねぎの詰め合わせです。料理に幅広くお使いいただけます。',
+                'price' => 300,
+                'description' => '新鮮な玉ねぎの詰め合わせ',
                 'condition' => '目立った傷や汚れなし',
+                'brand' => null,
                 'image_path' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/iLoveIMG+d.jpg',
-                'categories' => ['キッチン'], // 「野菜」等のカテゴリ指定が仕様書になければ親しいものを固定
+                'categories' => ['キッチン']
             ],
         ];
 
-        foreach ($items as $data) {
+        // 3. データの登録とカテゴリの完全一致紐付け
+        foreach ($itemsData as $data) {
             $item = Item::create([
                 'user_id' => $user->id,
                 'name' => $data['name'],
@@ -137,10 +144,9 @@ class ItemSeeder extends Seeder
                 'image_path' => $data['image_path'],
             ]);
 
-            // カテゴリを1〜2個ランダム付与
-            $item->categories()->sync(
-                Arr::random($categoryIds, rand(1, 2))
-            );
+            // 仕様書通りのカテゴリIDを取得して正確に同期
+            $syncIds = Category::whereIn('name', $data['categories'])->pluck('id')->toArray();
+            $item->categories()->sync($syncIds);
         }
     }
 }
